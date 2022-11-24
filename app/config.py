@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int
 
     class Config:
-        env_file = r"C:\Users\436\PycharmProjects\fastapi-blog-api+\.env"
+        env_file = r".env"
         env_file_encoding = "utf-8"
 
 
