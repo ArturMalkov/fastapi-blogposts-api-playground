@@ -15,7 +15,8 @@ router = APIRouter(prefix="/posts", tags=["posts"])
 def get_posts(db: Session = Depends(get_db),
               limit: Optional[int] = None,
               skip: Optional[int] = None,
-              search: Optional[str] = None
+              search: Optional[str] = None,
+              current_user: models.User = Depends(oauth2.get_current_user)
               ):
     # cursor.execute("""SELECT * FROM posts;""")
     # posts = cursor.fetchall()
@@ -60,10 +61,11 @@ def create_post(post: schemas.PostCreate,
 
 
 @router.get("/{id}", response_model=schemas.PostOut)
-def get_post(id: int, db: Session = Depends(get_db)):
+def get_post(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
     # cursor.execute("""SELECT * FROM posts WHERE id = %s""", (id,))
     # post = cursor.fetchone()
     post = db.query(models.Post, sa.func.count(models.Vote.post_id).label("votes")) \
+        .filter(models.Post.id == id) \
         .join(models.Vote, models.Post.id == models.Vote.post_id, isouter=True) \
         .group_by(models.Post.id)\
         .first()
@@ -105,12 +107,11 @@ def update_post(id: int,
     # conn.commit()
 
     post_query = db.query(models.Post).filter(models.Post.id == id)
-    post = post_query.first()
 
-    if post is None:
+    if post_query.first() is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"post with id {id} was not found.")
 
-    if post.user_id != current_user.id:
+    if post_query.first().user_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform requested action.")
 
     post_query.update(post.dict(), synchronize_session=False)
