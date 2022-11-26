@@ -10,16 +10,26 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '366a9bbfe724'
-down_revision = 'b573b70ca6a8'
+revision = "366a9bbfe724"
+down_revision = "b573b70ca6a8"
 branch_labels = None
 depends_on = None
 
 
 def upgrade() -> None:
-    op.add_column("posts", sa.Column("published", sa.Boolean, server_default="TRUE", nullable=False))
-    op.add_column("posts", sa.Column("created_at", sa.TIMESTAMP(timezone=True), server_default=sa.text("now()"),
-                                     nullable=False))
+    op.add_column(
+        "posts",
+        sa.Column("published", sa.Boolean, server_default="TRUE", nullable=False),
+    )
+    op.add_column(
+        "posts",
+        sa.Column(
+            "created_at",
+            sa.TIMESTAMP(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+    )
 
 
 def downgrade() -> None:

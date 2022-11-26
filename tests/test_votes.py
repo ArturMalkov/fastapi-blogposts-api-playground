@@ -19,22 +19,30 @@ def test_vote_on_post(authorized_client, test_posts):
 
 
 def test_vote_twice_on_post(authorized_client, test_posts, test_vote):
-    response = authorized_client.post("/vote", json={"post_id": test_posts[3].id, "vote_dir": 1})
+    response = authorized_client.post(
+        "/vote", json={"post_id": test_posts[3].id, "vote_dir": 1}
+    )
     assert response.status_code == 409
 
 
 def test_delete_vote(authorized_client, test_posts, test_vote):
-    response = authorized_client.post("/vote", json={"post_id": test_posts[3].id, "vote_dir": 0})
+    response = authorized_client.post(
+        "/vote", json={"post_id": test_posts[3].id, "vote_dir": 0}
+    )
     assert response.status_code == 201
 
 
 def test_delete_vote_which_does_not_exist(authorized_client, test_posts):
-    response = authorized_client.post("/vote", json={"post_id": test_posts[3].id, "vote_dir": 0})
+    response = authorized_client.post(
+        "/vote", json={"post_id": test_posts[3].id, "vote_dir": 0}
+    )
     assert response.status_code == 404
 
 
 def test_vote_on_post_which_does_not_exist(authorized_client, test_posts):
-    response = authorized_client.post("/vote", json={"post_id": 999999999, "vote_dir": 1})
+    response = authorized_client.post(
+        "/vote", json={"post_id": 999999999, "vote_dir": 1}
+    )
     assert response.status_code == 404
 
 

@@ -13,8 +13,12 @@ class Post(Base):
     title = sa.Column(sa.String, nullable=False)
     content = sa.Column(sa.String, nullable=False)
     published = sa.Column(sa.Boolean, server_default="TRUE", nullable=False)
-    created_at = sa.Column(TIMESTAMP(timezone=True), nullable=False, server_default=text("now()"))
-    user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    created_at = sa.Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
+    user_id = sa.Column(
+        sa.Integer, sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
 
     user = relationship("User")
 
@@ -25,7 +29,9 @@ class User(Base):
     id = sa.Column(sa.Integer, primary_key=True, nullable=False)
     email = sa.Column(sa.String, unique=True, nullable=False)
     password = sa.Column(sa.String, nullable=False)
-    created_at = sa.Column(TIMESTAMP(timezone=True), nullable=False, server_default=text("now()"))
+    created_at = sa.Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
 
     # posts = relationship(Post)
 
@@ -33,5 +39,9 @@ class User(Base):
 class Vote(Base):
     __tablename__ = "votes"
 
-    post_id = sa.Column(sa.Integer, sa.ForeignKey("posts.id", ondelete="CASCADE"), primary_key=True)
-    user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    post_id = sa.Column(
+        sa.Integer, sa.ForeignKey("posts.id", ondelete="CASCADE"), primary_key=True
+    )
+    user_id = sa.Column(
+        sa.Integer, sa.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )

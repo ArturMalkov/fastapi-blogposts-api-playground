@@ -16,7 +16,7 @@ app.add_middleware(
     allow_origins=origins,  # domains which are able to talk to our API
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
 app.include_router(auth.router)

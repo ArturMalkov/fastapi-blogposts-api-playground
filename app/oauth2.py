@@ -48,12 +48,14 @@ def verify_access_token(token: str, credentials_exception):
 
 
 # Dependency
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
+def get_current_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Couldn't validate credentials",
-        headers={"WWW-Authenticate": "Bearer"}
-        )
+        headers={"WWW-Authenticate": "Bearer"},
+    )
 
     token = verify_access_token(token, credentials_exception)
 

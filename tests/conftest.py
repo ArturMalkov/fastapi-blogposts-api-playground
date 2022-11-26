@@ -13,8 +13,10 @@ from app.oauth2 import create_access_token
 
 
 # SQLALCHEMY_DATABASE_URL = "postgresql://postgres:Kleopatra2003!@localhost:5433/blogposts_test"
-SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.database_password}" \
-                          f"@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test"
+SQLALCHEMY_DATABASE_URL = (
+    f"postgresql://{settings.database_username}:{settings.database_password}"
+    f"@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test"
+)
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
@@ -61,7 +63,9 @@ def test_user(client):
     assert response.status_code == 201
 
     new_user = response.json()
-    new_user["password"] = user_data["password"]  # since password is not included in UserOut response model
+    new_user["password"] = user_data[
+        "password"
+    ]  # since password is not included in UserOut response model
     return new_user
 
 
@@ -72,7 +76,9 @@ def test_user2(client):
     assert response.status_code == 201
 
     new_user = response.json()
-    new_user["password"] = user_data["password"]  # since password is not included in UserOut response model
+    new_user["password"] = user_data[
+        "password"
+    ]  # since password is not included in UserOut response model
     return new_user
 
 
@@ -82,34 +88,38 @@ def token(test_user):
 
 
 @pytest.fixture
-def authorized_client(client, token):  # to deal with path operations requiring authentication
-    client.headers = {
-        **client.headers,
-        "Authorization": f"Bearer {token}"
-    }
+def authorized_client(
+    client, token
+):  # to deal with path operations requiring authentication
+    client.headers = {**client.headers, "Authorization": f"Bearer {token}"}
 
     return client
 
 
 @pytest.fixture
 def test_posts(test_user, test_user2, db_session):
-    posts_data = [{
-        "title": "first title",
-        "content": "first content",
-        "user_id": test_user["id"]
-    }, {
-        "title": "second title",
-        "content": "second content",
-        "user_id": test_user["id"]
-    }, {
-        "title": "third title",
-        "content": "third content",
-        "user_id": test_user["id"]
-    }, {
-        "title": "fourth title",
-        "content": "fourth content",
-        "user_id": test_user2["id"]
-    }]
+    posts_data = [
+        {
+            "title": "first title",
+            "content": "first content",
+            "user_id": test_user["id"],
+        },
+        {
+            "title": "second title",
+            "content": "second content",
+            "user_id": test_user["id"],
+        },
+        {
+            "title": "third title",
+            "content": "third content",
+            "user_id": test_user["id"],
+        },
+        {
+            "title": "fourth title",
+            "content": "fourth content",
+            "user_id": test_user2["id"],
+        },
+    ]
 
     db_session.add_all([models.Post(**post) for post in posts_data])
     db_session.commit()
