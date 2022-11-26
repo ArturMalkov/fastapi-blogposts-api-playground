@@ -7,4 +7,4 @@ To launch development environment:
 To launch production environment:
 >docker-compose -f docker-compose-prod.yml up -d
 
-![Tests](https://github.com/ArturMalkov/fastapi-blogposts-api-playground/blob/main/.github/workflows/build-deploy.yml/badge.svg)
+[![Tests](https://github.com/ArturMalkov/fastapi-blogposts-api-playground/blob/main/.github/workflows/build-deploy.yml/badge.svg)](https://github.com/ArturMalkov/fastapi-blogposts-api-playground/blob/main/.github/workflows/build-deploy.yml)
