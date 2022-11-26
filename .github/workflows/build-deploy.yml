@@ -22,7 +22,7 @@ on: [push, pull_request]
 #   DATABASE_HOSTNAME: localhost
 
 jobs:
-    job1:
+    build:
         environment:
           name: testing  # to access all the environment variables set in the corresponding environment in GitHub
         # set job-specific environment variables - accessible only from within that job
@@ -91,3 +91,23 @@ jobs:
 
             - name: Image digest
               run: echo ${{steps.docker-build.outputs.digest}}
+
+    # responsible for pushing updates to our production environment
+    deploy:
+        runs-on: ubuntu-latest
+        needs: [build]  # wait for the 'build' job to run before this job runs - by default, jobs are run in parallel
+        environment:
+          name: production
+        env:
+          HEROKU_EMAIL: ${{secrets.HEROKU_EMAIL}}
+          HEROKU_APP_NAME: ${{secrets.HEROKU_APP_NAME}}
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+        steps:
+            - name: pulling git repo
+              uses: actions/checkout@v2
+            - name: deploying to Heroku
+              uses: akhileshns/heroku-deploy@v3.12.12
+              with:
+                heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+                heroku_email: ${{secrets.HEROKU_EMAIL}}
