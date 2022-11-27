@@ -27,7 +27,7 @@ app.include_router(vote.router)
 
 @app.get("/")
 def root():
-    return {"message": "Successfully deployed from CI/CD pipeline"}
+    return {"message": "Successfully deployed to Heroku and Digital Ocean from CI/CD pipeline"}
 
 
 # if __name__ == "__main__":
