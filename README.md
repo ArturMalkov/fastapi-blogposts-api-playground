@@ -8,4 +8,3 @@ To launch development environment:
 
 To launch production environment:
 >docker-compose -f docker-compose-prod.yml up -d
-
